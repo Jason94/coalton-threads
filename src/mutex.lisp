@@ -30,21 +30,21 @@
       (fn ()
         (cell:read (.cell mutex)))))
 
-  (declare swap! (Mutex :a -> :a -> :a))
+  (declare swap! (Mutex :a * :a -> :a))
   (define (swap! mutex value)
     "Replace the value held in a Mutex, returning the old value."
     (lock:with-lock-held (.lock mutex)
       (fn ()
         (cell:swap! (.cell mutex) value))))
 
-  (declare write! (Mutex :a -> :a -> :a))
+  (declare write! (Mutex :a * :a -> :a))
   (define (write! mutex value)
     "Set the value held in a Mutex, returning the new value."
     (lock:with-lock-held (.lock mutex)
       (fn ()
         (cell:write! (.cell mutex) value))) )
 
-  (declare update! (Mutex :a -> (:a -> :a) -> :a))
+  (declare update! (Mutex :a * (:a -> :a) -> :a))
   (define (update! mutex f)
     "Swap the value held in a Mutex with a transforming function."
     (lock:with-lock-held (.lock mutex)

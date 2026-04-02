@@ -20,7 +20,7 @@
     (cv        cv:ConditionVariable)
     (lock      lock:Lock))
 
-  (declare new (Unit -> Barrier))
+  (declare new (Void -> Barrier))
   (define (new)
     (Barrier (cell:new True) (cv:new) (lock:new)))
 

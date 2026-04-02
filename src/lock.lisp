@@ -16,23 +16,23 @@
   (define-type Lock
     "Wrapper for a native non-recursive lock.")
 
-  (declare new (Unit -> Lock))
+  (declare new (Void -> Lock))
   (define (new)
     "Creates a non-recursive lock."
-    (lisp Lock ()
+    (lisp (-> Lock) ()
       (bt2:make-lock)))
 
   (declare acquire (Lock -> Boolean))
   (define (acquire lock)
     "Acquire `lock' for the calling thread."
-    (lisp Boolean (lock)
+    (lisp (-> Boolean) (lock)
       (bt2:acquire-lock lock)))
 
   (declare acquire-no-wait (Lock -> Boolean))
   (define (acquire-no-wait lock)
     "Acquire `lock' for the calling thread.
 Returns Boolean immediately, True if `lock' was acquired, False otherwise."
-    (lisp Boolean (lock)
+    (lisp (-> Boolean) (lock)
       (bt2:acquire-lock lock :wait nil)))
 
   (declare release (Lock -> (Result LispCondition Lock)))
@@ -43,11 +43,11 @@ thread. If other threads are waiting for the lock, the
 `acquire-lock' call in one of them will now be able to continue.
 
 Returns the lock."
-    (lisp (Result LispCondition Lock) (lock)
+    (lisp (-> Result LispCondition Lock) (lock)
       (cl:handler-case (Ok (bt2:release-lock lock))
         (cl:error (c) (Err c)))))
 
-  (declare with-lock-held (Lock -> (Unit -> :a) -> :a))
+  (declare with-lock-held (Lock * (Void -> :a) -> :a))
   (define (with-lock-held lock thunk)
     (acquire lock)
     (let ((result (thunk)))
