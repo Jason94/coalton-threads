@@ -36,13 +36,13 @@
       (lisp (-> LispThread) (thread)
         thread)))
 
-  (declare spawn ((Unit -> :a) -> Thread :a))
+  (declare spawn ((Void -> :a) -> Thread :a))
   (define (spawn thunk)
     "Creates and returns a thread, which will call the function
 `thunk' with no arguments: when `thunk' returns, the thread terminates."
     (lisp (-> Thread :a) (thunk)
       (bt2:make-thread
-       (cl:lambda () (call-coalton-function thunk Unit)))))
+       (cl:lambda () (call-coalton-function thunk)))))
 
   (declare current-thread (Void -> LispThread))
   (define (current-thread)
